@@ -178,9 +178,9 @@
 	type Annotation = {
 		x: number;
 		y: number;
-		yanchor: string;
-		yshift: number;
-		textangle: number;
+		// yanchor: string;
+		// yshift: number;
+		// textangle: number;
 		text: string; // Can be html
 		showarrow: boolean;
 	};
@@ -191,7 +191,7 @@
 	});
 
 	function buildAnnotations(layers: Layer[], weights: LayerVariable[]): Annotation[] {
-		const annotations = [];
+		const annotations : Annotation[] = [];
 		const lastNeuron = networkShape.layers[1].neurons[0];
 
 		const [w, biases] = weights.map((w) => w.read().flatten().arraySync() as number[]);
@@ -199,41 +199,44 @@
 		let weightIndex = 0;
 		for (const [i, layer] of layers.entries()) {
 			if (layer.classes) {
-				let maxActivation = undefined;
-				if (layer == layers[layers.length - 1]) {
-					maxActivation = Math.max(...layer.neurons.map((n) => n.activation));
-				}
+				// let maxActivation = undefined;
+				// if (layer == layers[layers.length - 1]) {
+				// 	maxActivation = Math.max(...layer.neurons.map((n) => n.activation));
+				// }
 				for (const [neuron, class_] of zip2(layer.neurons, layer.classes)) {
-					annotations.push({
+					const circle : Annotation = {
 						x: neuron.x,
 						y: neuron.y,
 						//yanchor: rank == 0 ? 'bottom' : 'top',
 						//textangle: layer.rotateClassNames ? -90 : 0,
 						//yshift: rank == 0 ? 10 : -10,
-						text: i==0 ? neuron.activation : '<span style="font-style: bold; font-size: 3rem;">+</span>',
+						text: i==0 ? ''+neuron.activation : '<span style="font-style: bold; font-size: 3rem;">+</span>',
 							// neuron.activation > 0 && neuron.activation == maxActivation
 							// 	? '<b>' + class_ + '</b>'
 							// 	: class_,
 						showarrow: false
-					});
+					};
+					annotations.push(circle);
 					// Ajout du texte au milieu des liaisons
 					if ( i==0 ) {
-						annotations.push({
+						const texte : Annotation = {
 							x: (neuron.x+lastNeuron.x)/2,
 							y: (neuron.y+lastNeuron.y)/2,
 							text: "&#215;<br>"+formulaFormatter.format(w[weightIndex]),
 							showarrow: false
-						});
+						};
+						annotations.push(texte);
 						weightIndex++;
 					}
 				}
 				if ( i==0 ) {
-					annotations.push({
+					const bias : Annotation = {
 						x: (layer.neurons[2].x+lastNeuron.x)/2+1,
 						y: (layer.neurons[2].y+lastNeuron.y)/2,
 						text: formulaFormatter.format(biases[0]),
 						showarrow: false
-					})
+					};
+					annotations.push(bias);
 				}
 			}
 		}
