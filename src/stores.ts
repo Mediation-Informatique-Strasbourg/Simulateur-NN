@@ -1,7 +1,4 @@
 import { writable } from 'svelte/store';
-import { newAllDigitsNetwork } from '$lib/networks/AllDigitsNetwork';
-import { newZeroOneNetwork } from '$lib/networks/ZeroOneNetwork';
-import { newFashionNetwork } from '$lib/networks/FashionNetwork';
 import { newTemperatureControlNetwork } from '$lib/networks/TemperatureControlNetwork';
 
 function asyncReloadable<T>(loader: () => Promise<T>) {
@@ -28,23 +25,5 @@ function persistable<T>(initialValue: T) {
 export const temperatureControlNetworkStore = asyncReloadable(async () =>
 	newTemperatureControlNetwork()
 );
-
-export const zeroOnenetworkStore = asyncReloadable(async () => {
-	const network = newZeroOneNetwork();
-	await network.dataSource.loadData();
-	return network;
-});
-
-export const allDigitsNetworkStore = asyncReloadable(async () => {
-	const network = newAllDigitsNetwork();
-	await network.dataSource.loadData();
-	return network;
-});
-
-export const fashionNetworkStore = asyncReloadable(async () => {
-	const network = newFashionNetwork();
-	await network.dataSource.loadData();
-	return network;
-});
 
 export const learningRateStore = persistable(0.2);

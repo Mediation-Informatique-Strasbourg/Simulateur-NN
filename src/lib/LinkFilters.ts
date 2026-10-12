@@ -5,11 +5,12 @@ export type LinkFilter = (links: Link[]) => Link[];
 export const allLinks: LinkFilter = (links) => links;
 
 export function visualWeight(link: Link): number {
-	if (link.activation) {
-		return link.weight * (1 + 0.5 * link.activation);
-	} else {
-		return link.weight;
-	}
+	// if (link.activation) {
+	// 	return link.weight * (1 + 0.5 * link.activation);
+	// } else {
+	// 	return link.weight;
+	// }
+	return 3;
 }
 
 export function makeTopNLinksFilter(maxLinks: number) {

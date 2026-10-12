@@ -24,18 +24,18 @@
 			type: 'area'
 		},
 		encoding: {
-			x: { field: 'samples', type: 'quantitative', axis: { title: null } },
+			x: { field: 'samples', type: 'quantitative', axis: { title: 'Nombre d\'exemples' } },
 			y: {
 				field: 'loss',
 				type: 'quantitative',
 				scale: { domainMin: 0 },
-				axis: { title: null }
+				axis: { title: 'Valeur de la Loss' }
 			},
 			tooltip: [
 				{ field: 'samples', type: 'quantitative' },
 				{ field: 'loss', type: 'quantitative' }
 			],
-			opacity: { value: 0.6 }
+			opacity: { value: 0.9 }
 		},
 		config: {
 			view: { stroke: null } // Removes the outer border box

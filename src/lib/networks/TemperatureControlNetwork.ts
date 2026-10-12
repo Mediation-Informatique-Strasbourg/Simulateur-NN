@@ -3,12 +3,13 @@ import { Network } from '$lib/Network';
 import type { DataSource, DataBatch } from '$lib/DataSource';
 import * as tf from '@tensorflow/tfjs';
 
-export function newTemperatureControlNetwork(): Network {
-	return new Network(
+export function newTemperatureControlNetwork(): [Network,TemperatureControlDataSource] {
+	let source = new TemperatureControlDataSource();
+	return [new Network(
 		newTemperatureControlTFModel(),
 		newTemperatureControlNetworkShape(),
-		new TemperatureControlDataSource()
-	);
+		source
+	), source];
 }
 
 function newTemperatureControlNetworkShape(): DenseNetwork {
@@ -91,37 +92,87 @@ export function computeApparentTemperature(T_C: number, v_kph: number, e_hPa: nu
 	return 1.0 * T_C - 0.19 * v_kph + 0.33 * e_hPa - 4.0;
 }
 
+// [0,30]
 export const MIN_TEMPERATURE = 0;
 export const MAX_TEMPERATURE = 30;
 
+// [0,50]
 export const MIN_WIND_SPEED = 0;
 export const MAX_WIND_SPEED = 50;
 
+// [6,40]
 export const MIN_WATER_VAPOR_PRESSURE = 6;
 export const MAX_WATER_VAPORT_PRESSURE = 40;
 
 class TemperatureControlDataSource implements DataSource {
+
+	private temperatureMin: number;
+	private temperatureMax: number;
+	private windSpeedMin: number;
+	private windSpeedMax: number;
+	private waterVaporPressureMin: number;
+	private waterVaporPressureMax: number;
+
+	constructor() {
+		this.temperatureMin = MIN_TEMPERATURE;
+		this.temperatureMax = MAX_TEMPERATURE;
+		this.windSpeedMin = MIN_WIND_SPEED;
+		this.windSpeedMax = MAX_WIND_SPEED;
+		this.waterVaporPressureMin = MIN_WATER_VAPOR_PRESSURE;
+		this.waterVaporPressureMax = MAX_WATER_VAPORT_PRESSURE;
+	}
+
 	async loadData(): Promise<void> {}
+
+	setFixedTemperature( value:number ) : void {
+		this.temperatureMin = value;
+		this.temperatureMax = value;
+	}
+
+	resetTemperatureInterval() : void {
+		this.temperatureMin = MIN_TEMPERATURE;
+		this.temperatureMax = MAX_TEMPERATURE;
+	}
+
+	setFixedWindSpeed( value:number ) : void {
+		this.windSpeedMin = value;
+		this.windSpeedMax = value;
+	}
+
+	resetWindSpeedInterval() : void {
+		this.windSpeedMin = MIN_WIND_SPEED;
+		this.windSpeedMax = MAX_WIND_SPEED;
+	}
+
+	setFixedWaterVaporPressure( value:number ) : void {
+		this.waterVaporPressureMin = value;
+		this.waterVaporPressureMax = value;
+	}
+
+	resetWaterVaporPressureInterval() : void {
+		this.waterVaporPressureMin = MIN_WATER_VAPOR_PRESSURE;
+		this.waterVaporPressureMax = MAX_WATER_VAPORT_PRESSURE;
+	}
 
 	nextTrainBatch(batchSize: number): DataBatch {
 		return tf.tidy(() => {
 			// 1. Generate random input inside the range
 			const temperature: tf.Tensor2D = tf.randomUniform(
 				[batchSize, 1],
-				MIN_TEMPERATURE,
-				MAX_TEMPERATURE
+				this.temperatureMin, //MIN_TEMPERATURE,
+				this.temperatureMax //MAX_TEMPERATURE
 			);
 
 			const windSpeed: tf.Tensor2D = tf.randomUniform(
 				[batchSize, 1],
-				MIN_WIND_SPEED,
-				MAX_WIND_SPEED
+				this.windSpeedMin, //MIN_WIND_SPEED,
+				this.windSpeedMax //MAX_WIND_SPEED
 			);
 
 			const waterVaporPressure: tf.Tensor2D = tf.randomUniform(
 				[batchSize, 1],
-				MIN_WATER_VAPOR_PRESSURE,
-				MAX_WATER_VAPORT_PRESSURE
+				this.waterVaporPressureMin, //MIN_WATER_VAPOR_PRESSURE,
+				this.waterVaporPressureMax //MAX_WATER_VAPORT_PRESSURE
 			);
 
 			const xs = tf.concat([temperature, windSpeed, waterVaporPressure], 1);
