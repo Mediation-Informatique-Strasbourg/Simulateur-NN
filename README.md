@@ -65,7 +65,7 @@ This step makes sure we haven't forgotten anything.
 This will run a full build and deploy
 
     npm run gh-pages
-    
+
 # References
 
 https://wandb.ai/mostafaibrahim17/ml-articles/reports/A-Deep-Dive-Into-Learning-Curves-in-Machine-Learning--Vmlldzo0NjA1ODY0
@@ -95,4 +95,3 @@ https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js
 Copyright (c) 2023-2026 Nicholas Wolff
 
 This project is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License - see the [LICENSE](LICENSE) file for details.
-

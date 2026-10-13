@@ -29,30 +29,30 @@
 		const w = $networkStore[0]?.tfModel.weights;
 		return w ? [...w] : undefined;
 	});
-	const neuronFormula = $derived(buildNeuronFormula(weights));
+	//const neuronFormula = $derived(buildNeuronFormula(weights));
 	const currentStats = $derived.by(() => {
 		void _tick;
 		const s = $networkStore[0]?.stats;
 		return s ? { ...s, losses: [...s.losses] } : null;
 	});
 
-	const formulaFormatter = Intl.NumberFormat('en', {
-		notation: 'compact',
-		maximumFractionDigits: 2
-	});
+	// const formulaFormatter = Intl.NumberFormat('en', {
+	// 	notation: 'compact',
+	// 	maximumFractionDigits: 2
+	// });
 
-	function buildNeuronFormula(tfWeights: tf.LayerVariable[] | undefined) {
-		// Build something like:  1,0 * T - 0.19 * V + 0.33 * H - 4
-		if (!tfWeights) {
-			return;
-		}
-		const withOperator = (x: number) =>
-			x > 0 ? `+ ${formulaFormatter.format(x)}` : `- ${formulaFormatter.format(Math.abs(x))}`;
-		const [weights, biases] = tfWeights.map((w) => w.read().flatten().arraySync() as number[]);
-		const [wT, wV, wH] = weights;
-		const bias = biases[0];
-		return `${formulaFormatter.format(wT)} * T ${withOperator(wV)} * V ${withOperator(wH)} * H ${withOperator(bias)}`;
-	}
+	// function buildNeuronFormula(tfWeights: tf.LayerVariable[] | undefined) {
+	// 	// Build something like:  1,0 * T - 0.19 * V + 0.33 * H - 4
+	// 	if (!tfWeights) {
+	// 		return;
+	// 	}
+	// 	const withOperator = (x: number) =>
+	// 		x > 0 ? `+ ${formulaFormatter.format(x)}` : `- ${formulaFormatter.format(Math.abs(x))}`;
+	// 	const [weights, biases] = tfWeights.map((w) => w.read().flatten().arraySync() as number[]);
+	// 	const [wT, wV, wH] = weights;
+	// 	const bias = biases[0];
+	// 	return `${formulaFormatter.format(wT)} * T ${withOperator(wV)} * V ${withOperator(wH)} * H ${withOperator(bias)}`;
+	// }
 
 	const formatter = Intl.NumberFormat('en', { maximumFractionDigits: 1 });
 
@@ -64,11 +64,11 @@
 	let pressureBlocked = $state(false);
 	let windBlocked = $state(false);
 
-	let prediction: number[] | undefined = $state(undefined);
-	let activations: number[][] | undefined = $state(undefined);
+	let prediction: number = $state(0);
+	let activations: number[][] = $state([]);
 	let linkFilter = allLinks;
 
-	const formattedPrediction = $derived(formatter.format(prediction as any));
+	const formattedPrediction = $derived(formatter.format(prediction));
 	const formattedComputedApparentTemperature = $derived(
 		formatter.format(computeApparentTemperature(temperature, windSpeed, waterVaporPressure))
 	);
@@ -86,13 +86,11 @@
 		Math.floor(Math.random() * (max - min) + min);
 
 	function show_example_in_UI() {
-		console.log("Blocked ? " + temperatureBlocked);
-		
-		if ( !temperatureBlocked )
-			temperature = randomUniformInt(MIN_TEMPERATURE, MAX_TEMPERATURE);
-		if ( !windBlocked )
-			windSpeed = randomUniformInt(MIN_WIND_SPEED, MAX_WIND_SPEED);
-		if ( !pressureBlocked )
+		console.log('Blocked ? ' + temperatureBlocked);
+
+		if (!temperatureBlocked) temperature = randomUniformInt(MIN_TEMPERATURE, MAX_TEMPERATURE);
+		if (!windBlocked) windSpeed = randomUniformInt(MIN_WIND_SPEED, MAX_WIND_SPEED);
+		if (!pressureBlocked)
 			waterVaporPressure = randomUniformInt(MIN_WATER_VAPOR_PRESSURE, MAX_WATER_VAPORT_PRESSURE);
 		predict_apparent_temperature();
 	}
@@ -100,7 +98,7 @@
 	function predict_apparent_temperature() {
 		const result = calculateActivations(temperature, windSpeed, waterVaporPressure);
 		activations = result;
-		prediction = result[result.length - 1];
+		prediction = result[result.length - 1][0];
 	}
 
 	function calculateActivations(
@@ -198,26 +196,20 @@
 
 	function blockTemperature() {
 		temperatureBlocked = !temperatureBlocked;
-		if ( temperatureBlocked )
-			$networkStore[1].setFixedTemperature(temperature)
-		else
-			$networkStore[1].resetTemperatureInterval();
+		if (temperatureBlocked) $networkStore[1].setFixedTemperature(temperature);
+		else $networkStore[1].resetTemperatureInterval();
 	}
 
 	function blockWind() {
-		windBlocked = !windBlocked
-		if ( windBlocked )
-			$networkStore[1].setFixedWindSpeed(windSpeed)
-		else
-			$networkStore[1].resetWindSpeedInterval();
+		windBlocked = !windBlocked;
+		if (windBlocked) $networkStore[1].setFixedWindSpeed(windSpeed);
+		else $networkStore[1].resetWindSpeedInterval();
 	}
 
 	function blockPressure() {
-		pressureBlocked = !pressureBlocked
-		if ( pressureBlocked )
-			$networkStore[1].setFixedWaterVaporPressure(waterVaporPressure)
-		else
-			$networkStore[1].resetWaterVaporPressureInterval();
+		pressureBlocked = !pressureBlocked;
+		if (pressureBlocked) $networkStore[1].setFixedWaterVaporPressure(waterVaporPressure);
+		else $networkStore[1].resetWaterVaporPressureInterval();
 	}
 </script>
 
@@ -255,12 +247,8 @@
 						class="range range-primary range-xs"
 					/>
 					<p>
-					Fixer la valeur
-					<input
-						type="checkbox"
-						checked={temperatureBlocked}
-						onchange={blockTemperature}
-					/>
+						Fixer la valeur
+						<input type="checkbox" checked={temperatureBlocked} onchange={blockTemperature} />
 					</p>
 					<!-- <div class="stat-value !text-xl">{temperature} °C</div> -->
 				</div>
@@ -276,12 +264,8 @@
 						class="range range-primary range-xs"
 					/>
 					<p>
-					Fixer la valeur
-					<input
-						type="checkbox"
-						checked={windBlocked}
-						onchange={blockWind}
-					/>
+						Fixer la valeur
+						<input type="checkbox" checked={windBlocked} onchange={blockWind} />
 					</p>
 					<!-- <div class="stat-value !text-xl">{windSpeed} km/h</div> -->
 				</div>
@@ -297,12 +281,8 @@
 						class="range range-primary range-xs"
 					/>
 					<p>
-					Fixer la valeur
-					<input
-						type="checkbox"
-						checked={pressureBlocked}
-						onchange={blockPressure}
-					/>
+						Fixer la valeur
+						<input type="checkbox" checked={pressureBlocked} onchange={blockPressure} />
 					</p>
 					<!-- <div class="stat-value !text-xl">{waterVaporPressure} hPa</div> -->
 				</div>

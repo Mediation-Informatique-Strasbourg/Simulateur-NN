@@ -7,7 +7,7 @@
 	const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
 	const formattedNumExamples = $derived(formatter.format(stats.samplesSeen));
-	const losses = $derived(stats.losses??[]);
+	const losses = $derived(stats.losses ?? []);
 </script>
 
 <div class="stats bg-base-200 stats-vertical">

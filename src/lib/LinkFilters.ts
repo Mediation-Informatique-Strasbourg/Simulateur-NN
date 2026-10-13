@@ -4,12 +4,7 @@ export type LinkFilter = (links: Link[]) => Link[];
 
 export const allLinks: LinkFilter = (links) => links;
 
-export function visualWeight(link: Link): number {
-	// if (link.activation) {
-	// 	return link.weight * (1 + 0.5 * link.activation);
-	// } else {
-	// 	return link.weight;
-	// }
+export function visualWeight(): number {
 	return 3;
 }
 
@@ -19,9 +14,7 @@ export function makeTopNLinksFilter(maxLinks: number) {
 		if (length <= maxLinks) {
 			return links;
 		}
-		const sortedLinks = [...links].sort(
-			(l1: Link, l2: Link) => Math.abs(visualWeight(l2)) - Math.abs(visualWeight(l1))
-		);
+		const sortedLinks = [...links];
 		return sortedLinks.slice(0, maxLinks);
 	};
 }
@@ -38,13 +31,6 @@ function selectBelow(links: Link[], neurons: Neuron[]): Link[] {
 }
 
 export const neighborsFilter = farNeighborsFilter;
-
-// Keep all neurons that are directly connected to the given neuron
-function immediateNeighborsFilter(neuron: Neuron) {
-	return function (links: Link[]) {
-		return links.filter((link) => link.a == neuron || link.b == neuron);
-	};
-}
 
 // Keep all neurons that are somehow connected to the given neuron
 function farNeighborsFilter(neuron: Neuron) {

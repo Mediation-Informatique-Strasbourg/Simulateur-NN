@@ -24,7 +24,7 @@
 			type: 'area'
 		},
 		encoding: {
-			x: { field: 'samples', type: 'quantitative', axis: { title: 'Nombre d\'exemples' } },
+			x: { field: 'samples', type: 'quantitative', axis: { title: "Nombre d'exemples" } },
 			y: {
 				field: 'loss',
 				type: 'quantitative',

@@ -3,13 +3,12 @@ import { Network } from '$lib/Network';
 import type { DataSource, DataBatch } from '$lib/DataSource';
 import * as tf from '@tensorflow/tfjs';
 
-export function newTemperatureControlNetwork(): [Network,TemperatureControlDataSource] {
-	let source = new TemperatureControlDataSource();
-	return [new Network(
-		newTemperatureControlTFModel(),
-		newTemperatureControlNetworkShape(),
+export function newTemperatureControlNetwork(): [Network, TemperatureControlDataSource] {
+	const source = new TemperatureControlDataSource();
+	return [
+		new Network(newTemperatureControlTFModel(), newTemperatureControlNetworkShape(), source),
 		source
-	), source];
+	];
 }
 
 function newTemperatureControlNetworkShape(): DenseNetwork {
@@ -105,7 +104,6 @@ export const MIN_WATER_VAPOR_PRESSURE = 6;
 export const MAX_WATER_VAPORT_PRESSURE = 40;
 
 class TemperatureControlDataSource implements DataSource {
-
 	private temperatureMin: number;
 	private temperatureMax: number;
 	private windSpeedMin: number;
@@ -124,32 +122,32 @@ class TemperatureControlDataSource implements DataSource {
 
 	async loadData(): Promise<void> {}
 
-	setFixedTemperature( value:number ) : void {
+	setFixedTemperature(value: number): void {
 		this.temperatureMin = value;
 		this.temperatureMax = value;
 	}
 
-	resetTemperatureInterval() : void {
+	resetTemperatureInterval(): void {
 		this.temperatureMin = MIN_TEMPERATURE;
 		this.temperatureMax = MAX_TEMPERATURE;
 	}
 
-	setFixedWindSpeed( value:number ) : void {
+	setFixedWindSpeed(value: number): void {
 		this.windSpeedMin = value;
 		this.windSpeedMax = value;
 	}
 
-	resetWindSpeedInterval() : void {
+	resetWindSpeedInterval(): void {
 		this.windSpeedMin = MIN_WIND_SPEED;
 		this.windSpeedMax = MAX_WIND_SPEED;
 	}
 
-	setFixedWaterVaporPressure( value:number ) : void {
+	setFixedWaterVaporPressure(value: number): void {
 		this.waterVaporPressureMin = value;
 		this.waterVaporPressureMax = value;
 	}
 
-	resetWaterVaporPressureInterval() : void {
+	resetWaterVaporPressureInterval(): void {
 		this.waterVaporPressureMin = MIN_WATER_VAPOR_PRESSURE;
 		this.waterVaporPressureMax = MAX_WATER_VAPORT_PRESSURE;
 	}

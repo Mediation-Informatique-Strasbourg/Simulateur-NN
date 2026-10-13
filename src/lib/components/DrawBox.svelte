@@ -24,6 +24,7 @@
 	let isdown = false;
 	let pointerId = -1;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const eventfunctions: { [id: string]: any } = {
 		pointerdown: (e: { clientX: number; clientY: number; pointerId: number }) => {
 			if (!isdown) {
