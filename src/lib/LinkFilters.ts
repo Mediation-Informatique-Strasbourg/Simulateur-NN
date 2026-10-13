@@ -4,10 +4,6 @@ export type LinkFilter = (links: Link[]) => Link[];
 
 export const allLinks: LinkFilter = (links) => links;
 
-export function visualWeight(): number {
-	return 3;
-}
-
 export function makeTopNLinksFilter(maxLinks: number) {
 	return function (links: Link[]) {
 		const length = links.length;
