@@ -216,28 +216,28 @@
 {#if isLoading}
 	<span class="loading loading-spinner loading-lg text-primary"></span>
 {:else}
-	<div class="grid grid-cols-6 gap-9">
+	<div class="flex flex-row">
 		<!-- Left -->
-		<div class="col-span-1 shadow p-2">
-			<h1 class="text-2xl mt-3 mb-6">Apprentissage</h1>
-			<button class="btn btn-outline btn-primary mt-5 mb-5 p-6" onclick={train1}>
+		<div class="flex flex-col p-2">
+			<h2 class="text-2xl text-center mb-6">Apprentissage</h2>
+			<button class="btn btn-outline btn-primary mt-2 mb-2" onclick={train1}>
 				Entraîner avec 1 exemple
 			</button>
-			<button class="btn btn-outline btn-primary mt-5 mb-5 p-6" onclick={train100}>
+			<button class="btn btn-outline btn-primary mt-2 mb-2" onclick={train100}>
 				Entraîner avec 100 exemples
 			</button>
-			<button class="btn btn-outline btn-primary mt-5 mb-5 p-6" onclick={train1000}>
+			<button class="btn btn-outline btn-primary mt-2 mb-2" onclick={train1000}>
 				Entraîner avec 1000 exemples
 			</button>
 		</div>
 
 		<!-- Center -->
-		<div class="col-span-3">
+		<div class="p-2" style="max-width:605px; min-width: 605px;">
 			<!-- Controls -->
 			<div class="grid grid-cols-3 stats stats-horizontal">
 				<div class="ml-2 mr-2 text-center">
-					<h2 class="text-xl mt-1 mb-1">Température</h2>
-					<p class="stat-title !text-base">(en °C)</p>
+					<h2 class="text-xl mt-1 mb-1"><br>Température</h2>
+					<p class="stat-title !text-base italic">(en °C)</p>
 					<input
 						type="range"
 						min={MIN_TEMPERATURE}
@@ -253,8 +253,8 @@
 					<!-- <div class="stat-value !text-xl">{temperature} °C</div> -->
 				</div>
 				<div class="ml-2 mr-2 text-center">
-					<h2 class="text-xl mt-1 mb-1">Vent</h2>
-					<p class="stat-title !text-base">(en km/h)</p>
+					<h2 class="text-xl mt-1 mb-1"><br>Vent</h2>
+					<p class="stat-title !text-base italic">(en km/h)</p>
 					<input
 						type="range"
 						min={MIN_WIND_SPEED}
@@ -271,7 +271,7 @@
 				</div>
 				<div class="ml-2 mr-2 text-center">
 					<h2 class="text-xl mt-1 mb-1">Pression atmosphérique</h2>
-					<p class="stat-title !text-base">(en hPa)</p>
+					<p class="stat-title !text-base italic">(en hPa)</p>
 					<input
 						type="range"
 						min={MIN_WATER_VAPOR_PRESSURE}
@@ -315,7 +315,8 @@
 			</div>
 		</div>
 
-		<div class="row align-items-center">
+		<div class="flex flex-col p-2">
+			<h2 class="text-2xl text-center mb-6">Statistiques</h2>
 			<NetworkStats stats={currentStats!} />
 			<button class="btn btn-outline btn-error mb-5 mt-5 align-center" onclick={resetModel}>
 				Réinitialiser le réseau

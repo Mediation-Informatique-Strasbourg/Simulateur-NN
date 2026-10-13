@@ -12,6 +12,4 @@
 
 <div class="divider m-0 pb-6"></div>
 
-<div class="container px-8">
-	{@render children()}
-</div>
+{@render children()}
