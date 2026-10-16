@@ -1,96 +1,70 @@
-A web application to experiment with a neural network that recognizes handwritten digits : training, predicting, evaluating the precision.
+Un reseau de 1 neurone pour la température ressentie
+====================================================
 
-Deployed automatically when branch main is pushed, to:
+![](screenshot.png)
 
-http://nn.nwolff.info/
+Il s'agit d'une application web qui permet de simuler un réseau de 1 neurone qui détermine la température ressentie à aprtir de la température réelle, la vitesse du vent et la pression atmosphérique.
 
-Usage statistics collected with umami.js
+Cette application permet :
 
-The python backend is only needed if you want to train new/different models or generate new datasets for use in the frontend.
+- d'entraîner le réseau
+- de faire des prédctions (phase d'inférence)
+- de visualiser l'évolution de la Loss
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/nwolff/cours-NN)
+Cette application peut être utilisée dans le cadre de l'enseignement de l'informatique au collège et lycée.
 
-# Tooling
+Elle est déployée sur https://mediation-informatique-strasbourg.github.io/Simulateur-NN/
 
-Requires an installation of nodejs
-
-On a mac without homebrew or admin permissions, one can use nvm:
-https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating
-
-Then:
-
-    nvm install 25
-
-## Installing dependencies
+Installation
+------------
 
     npm install
 
-## Updating dependencies
-
-    npm update
-
-## Developing
-
-Running the app under development, with automatic reload:
+Lancer l'application en mode "développeur", avec rechargement automatique
+-------------------------------------------------------------------------
 
     npm run dev -- --open
 
-Automatically formatting:
+Développer
+----------
+
+Formattage automqatique :
 
     npm run format
 
-Linting:
+Analyse syntaxique :
 
     npm run lint
 
-There are currently some linting errors
-
-Type-checking:
+Vérification du typage
 
     npm run check
 
-## Verifying the production build
+Références
+----------
 
-Sveltekit has a server-side rendering capability to optimize page loads.
-We want to build a single page app that will be served statically, so we have to disable server-side rendering for each of our routes.
-This step makes sure we haven't forgotten anything.
+- https://wandb.ai/mostafaibrahim17/ml-articles/reports/A-Deep-Dive-Into-Learning-Curves-in-Machine-Learning--Vmlldzo0NjA1ODY0
+- https://medium.com/duke-ai-society-blog/training-neural-networks-for-binary-classification-identifying-types-of-breast-cancer-keras-in-r-b38fb26a500c
+- https://artemoppermann.com/activation-functions-in-deep-learning-sigmoid-tanh-relu/
+- https://www.tensorflow.org/tutorials/keras/keras_tuner
+- https://medium.com/@chamara95.eng/neural-network-example-using-fashion-mnist-dataset-c19b48c86cf1
 
-    npm run build
-    npm run preview -- --open
+Références techniques
+---------------------
 
-## Deploying to GitHub pages manually
+- https://github.com/idris-maps/svelte-parts/blob/master/src/lib/DropFile.svelte
+- https://blog.filestack.com/how-to-read-uploaded-file-content-in-javascript/
+- https://dev.to/dailydevtips1/vanilla-javascript-canvas-images-to-black-and-white-mpe
+- https://plotly.com/javascript/plotlyjs-events/
+- https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js
 
-(The app is currently automatically deployed with github actions when the main branch is pushed)
+Source
+------
 
-This will run a full build and deploy
+Cette application est basée sur celle de Nicholas Wolff (@nwolff) disponible sur ce dépôt : https://github.com/nwolff/cours-NN
 
-    npm run gh-pages
-
-# References
-
-https://wandb.ai/mostafaibrahim17/ml-articles/reports/A-Deep-Dive-Into-Learning-Curves-in-Machine-Learning--Vmlldzo0NjA1ODY0
-
-https://medium.com/duke-ai-society-blog/training-neural-networks-for-binary-classification-identifying-types-of-breast-cancer-keras-in-r-b38fb26a500c
-
-https://artemoppermann.com/activation-functions-in-deep-learning-sigmoid-tanh-relu/
-
-https://www.tensorflow.org/tutorials/keras/keras_tuner
-
-https://medium.com/@chamara95.eng/neural-network-example-using-fashion-mnist-dataset-c19b48c86cf1
-
-# Technical
-
-https://github.com/idris-maps/svelte-parts/blob/master/src/lib/DropFile.svelte
-
-https://blog.filestack.com/how-to-read-uploaded-file-content-in-javascript/
-
-https://dev.to/dailydevtips1/vanilla-javascript-canvas-images-to-black-and-white-mpe
-
-https://plotly.com/javascript/plotlyjs-events/
-
-https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js
-
-# License
+License
+-------
 
 Copyright (c) 2023-2026 Nicholas Wolff
 
