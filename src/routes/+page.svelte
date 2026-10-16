@@ -86,8 +86,6 @@
 		Math.floor(Math.random() * (max - min) + min);
 
 	function show_example_in_UI() {
-		console.log('Blocked ? ' + temperatureBlocked);
-
 		if (!temperatureBlocked) temperature = randomUniformInt(MIN_TEMPERATURE, MAX_TEMPERATURE);
 		if (!windBlocked) windSpeed = randomUniformInt(MIN_WIND_SPEED, MAX_WIND_SPEED);
 		if (!pressureBlocked)
