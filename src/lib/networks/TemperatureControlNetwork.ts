@@ -181,8 +181,8 @@ class TemperatureControlDataSource implements DataSource {
 				.mul(1.0)
 				.sub(windSpeed.mul(0.19))
 				.add(waterVaporPressure.mul(0.33))
-				.sub(4.0)
-				.add(tf.randomNormal([batchSize, 1], 0, 0.01));
+				.sub(4.0);
+				//.add(tf.randomNormal([batchSize, 1], 0, 0.01));
 
 			return {
 				xs: xs,
